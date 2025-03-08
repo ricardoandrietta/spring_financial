@@ -75,4 +75,26 @@ class User
     {
         $this->id = $id;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'age' => $this->age,
+            'score' => $this->score,
+            'address' => $this->address,
+        ];
+    }
+
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            name: $data['name'],
+            age: $data['age'],
+            score: $data['score'] ?? 0,
+            address: $data['address'],
+            id: $data['id'] ?? null
+        );
+    }
 }
