@@ -1,0 +1,43 @@
+###############################################################################
+#                          Generated on phpdocker.io                          #
+###############################################################################
+version: '3.1'
+services:
+    redis:
+        image: 'redis:alpine'
+        container_name: spring_redis
+
+    mysql:
+        image: 'mysql:8.0'
+        working_dir: /application
+        container_name: spring_db
+        volumes:
+            - './data:/var/lib/mysql/'
+        environment:
+            - MYSQL_ROOT_PASSWORD=spring_032025
+            - MYSQL_DATABASE=leaderboard
+            - MYSQL_USER=leaderboard
+            - MYSQL_PASSWORD=financial_202503
+        ports:
+            - '3306:3306'
+
+    webserver:
+        image: 'nginx:alpine'
+        working_dir: /application
+        container_name: spring_web
+        volumes:
+            - './application:/application'
+            - './phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
+        ports:
+            - '8000:80'
+
+    php-fpm:
+        build: phpdocker/php-fpm
+        working_dir: /application
+        container_name: spring_php
+        volumes:
+            - './application:/application'
+            - './phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/8.3/fpm/conf.d/99-overrides.ini'
+            - './phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/8.3/cli/conf.d/99-overrides.ini'
+        environment:
+            - PHP_IDE_CONFIG=serverName=SpringFinancial # debugging purposes
