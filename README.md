@@ -7,4 +7,5 @@ Back End Developer Assignment
 - Under application folder
   - composer install
   - php artisan migrate
+  - php artisan db:seed
   - npm install && npm run build
