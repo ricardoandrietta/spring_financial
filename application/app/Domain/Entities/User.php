@@ -97,4 +97,13 @@ class User
             id: $data['id'] ?? null
         );
     }
+
+    public static function rules(): array
+    {
+        return [
+            'name' => 'required|string|max:150',
+            'age' => 'required|integer|min:1|max:100',
+            'address' => 'required|string|max:350',
+        ];
+    }
 }

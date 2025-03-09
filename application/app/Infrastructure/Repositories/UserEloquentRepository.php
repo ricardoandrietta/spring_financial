@@ -23,7 +23,9 @@ class UserEloquentRepository implements \App\Domain\Repositories\Interfaces\User
      */
     public function getAllOrderedByScore(string $orderDirection = 'desc'): array
     {
-        $users = UserModel::orderBy('score', $orderDirection)->get();
+        $users = UserModel::orderBy('score', $orderDirection)
+            ->orderBy('name', 'asc')
+            ->get();
 
         return $users->map(function ($userModel) {
             return $this->mapToEntity($userModel);
