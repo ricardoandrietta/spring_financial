@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Infrastructure\Repositories;
 
 use App\Domain\Entities\User;
+use App\Domain\Repositories\Interfaces\UserRepositoryInterface;
 use App\Models\User as UserModel;
+use Illuminate\Support\Facades\DB;
 
-class UserEloquentRepository implements \App\Domain\Repositories\Interfaces\UserRepositoryInterface
+class UserEloquentRepository implements UserRepositoryInterface
 {
 
     public function resetScores(): void
@@ -183,5 +185,26 @@ class UserEloquentRepository implements \App\Domain\Repositories\Interfaces\User
             address: $userModel->address,
             id: $userModel->id
         );
+    }
+
+    /**
+     * Return users by score
+     *
+     * @return array
+     */
+    public function getUsersGroupedByScore(): array
+    {
+        $users = UserModel::select('name', 'score', 'age')
+            ->orderBy('score', 'desc')
+            ->get()
+            ->groupBy('score')
+            ->map(function ($group) {
+                return [
+                    'names' => $group->pluck('name')->toArray(),
+                    'average_age' => $group->avg('age')
+                ];
+            });
+
+        return $users->toArray();
     }
 }

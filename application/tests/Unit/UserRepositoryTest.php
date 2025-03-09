@@ -121,19 +121,19 @@ test('can update a user', function () {
     ]);
 });
 
-//test('can delete a user', function () {
-//    $userModel = UserModel::create([
-//        'name' => 'To Delete',
-//        'age' => 45,
-//        'address' => '202 Delete St',
-//        'score' => 20,
-//    ]);
-//
-//    $result = $this->repository->delete($userModel->id);
-//
-//    expect($result)->toBeTrue();
-//    $this->assertDatabaseMissing('users', ['id' => $userModel->id]);
-//});
+test('can delete a user', function () {
+    $userModel = UserModel::create([
+        'name' => 'To Delete',
+        'age' => 45,
+        'address' => '202 Delete St',
+        'score' => 20,
+    ]);
+
+    $result = $this->repository->delete($userModel->id);
+
+    expect($result)->toBeTrue();
+    $this->assertSoftDeleted('users', ['id' => $userModel->id]);
+});
 
 test('can add points to a user', function () {
     $userModel = UserModel::create([
@@ -229,4 +229,48 @@ test('can get all users ordered by score asc', function () {
     expect($users[0]->getScore())->toBe(5);
     expect($users[1]->getScore())->toBe(25);
     expect($users[2]->getScore())->toBe(50);
+});
+
+test('users are grouped by score with names as array and average age', function () {
+    // Arrange - Create test users with different scores
+    UserModel::factory()->create([
+        'name' => 'John',
+        'score' => 85,
+        'age' => 25
+    ]);
+
+    UserModel::factory()->create([
+        'name' => 'Sarah',
+        'score' => 92,
+        'age' => 30
+    ]);
+
+    UserModel::factory()->create([
+        'name' => 'Mike',
+        'score' => 85,
+        'age' => 35
+    ]);
+
+    // Act - Call the repository method
+    $result = $this->repository->getUsersGroupedByScore();
+
+    // Assert - Check structure and values
+    expect($result)->toBeArray()
+        ->toHaveKeys([85, 92]);
+
+    expect($result[85])->toBeArray()
+        ->toHaveKeys(['names', 'average_age']);
+
+    expect($result[85]['names'])->toBeArray()
+        ->toContain('John')
+        ->toContain('Mike')
+        ->toHaveCount(2);
+
+    expect($result[85]['average_age'])->toBe(30);
+
+    expect($result[92]['names'])->toBeArray()
+        ->toContain('Sarah')
+        ->toHaveCount(1);
+
+    expect($result[92]['average_age'])->toBe(30);
 });
