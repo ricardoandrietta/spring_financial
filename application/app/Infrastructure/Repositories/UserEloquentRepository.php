@@ -67,10 +67,6 @@ class UserEloquentRepository implements UserRepositoryInterface
         ]);
 
         $userModel->save();
-
-        // Trigger leaderboard update event
-//        event(new LeaderboardUpdated());
-
         return $this->mapToEntity($userModel);
     }
 
@@ -91,9 +87,6 @@ class UserEloquentRepository implements UserRepositoryInterface
             'address' => $user->getAddress(),
         ]);
 
-        // Trigger leaderboard update event
-//        event(new LeaderboardUpdated());
-
         return $this->mapToEntity($userModel);
     }
 
@@ -111,12 +104,7 @@ class UserEloquentRepository implements UserRepositoryInterface
             return false;
         }
 
-        $result = $userModel->delete();
-
-        // Trigger leaderboard update event
-//        event(new LeaderboardUpdated());
-
-        return $result;
+        return $userModel->delete();
     }
 
     /**
@@ -136,10 +124,6 @@ class UserEloquentRepository implements UserRepositoryInterface
 
         $userModel->score += $points;
         $userModel->save();
-
-        // Trigger leaderboard update event
-//        event(new LeaderboardUpdated());
-
         return $this->mapToEntity($userModel);
     }
 
@@ -163,10 +147,6 @@ class UserEloquentRepository implements UserRepositoryInterface
             $userModel->score = 0;
         }
         $userModel->save();
-
-        // Trigger leaderboard update event
-//        event(new LeaderboardUpdated());
-
         return $this->mapToEntity($userModel);
     }
 
@@ -224,5 +204,22 @@ class UserEloquentRepository implements UserRepositoryInterface
         ]);
 
         return $this->mapToEntity($userModel);
+    }
+
+    /**
+     * @return User[]
+     */
+    public function findUsersWithHighestScore(): array
+    {
+        // Get the highest score
+        $highestScore = UserModel::max('score');
+
+        // Get all users with that score
+        $users = UserModel::where('score', $highestScore)->get();
+
+        // Map Eloquent models to domain entities
+        return $users->map(function ($userModel) {
+            return $this->mapToEntity($userModel);
+        })->toArray();
     }
 }

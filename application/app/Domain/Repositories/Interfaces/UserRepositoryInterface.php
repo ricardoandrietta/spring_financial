@@ -79,4 +79,11 @@ interface UserRepositoryInterface
      * @return array
      */
     public function getUsersGroupedByScore(): array;
+
+    /**
+     * Find users with the highest score.
+     *
+     * @return array<User> Array of users with the highest score
+     */
+    public function findUsersWithHighestScore(): array;
 }
