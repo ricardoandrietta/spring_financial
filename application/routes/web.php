@@ -1,12 +1,8 @@
 <?php
 
-use App\Livewire\Settings\Appearance;
-use App\Livewire\Settings\Password;
-use App\Livewire\Settings\Profile;
+use App\Livewire\Leaderboard\Leaderboard;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', Leaderboard::class);
 
 

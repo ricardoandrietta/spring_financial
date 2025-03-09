@@ -12,6 +12,7 @@ use App\Application\UseCases\User\DeleteUserUseCase;
 use App\Application\UseCases\User\GetAllUsersUseCase;
 use App\Application\UseCases\User\GetUserUseCase;
 use App\Application\UseCases\User\UpdateScoreUseCase;
+use App\Domain\Entities\User;
 use App\Domain\Enums\ScoreOperationEnum;
 use App\Http\Controllers\Controller;
 use App\Infrastructure\Repositories\UserEloquentRepository;
@@ -67,11 +68,7 @@ class UserController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:150',
-            'age' => 'required|integer|min:1|max:100',
-            'address' => 'required|string|max:350',
-        ]);
+        $validatedData = $request->validate(User::rules());
 
         $inputDTO = new CreateUserInputDTO(
             name: $validatedData['name'],
