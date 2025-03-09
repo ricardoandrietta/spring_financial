@@ -8,6 +8,9 @@ use App\Application\Exceptions\UserNotFoundException;
 use App\Domain\Entities\User;
 use App\Domain\Enums\ScoreOperationEnum;
 use App\Domain\Repositories\Interfaces\UserRepositoryInterface;
+use App\Domain\Services\Interfaces\QrCodeAdapterInterface;
+use App\Domain\Services\Interfaces\QrCodeServiceInterface;
+use App\Domain\Services\QrCodeService;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +20,11 @@ use App\Domain\Repositories\Interfaces\UserRepositoryInterface;
 test('create user use case creates a user', function () {
     // Prepare user to be returned by repository
     $user = new User(name: 'Test User', age: 25, score: 0, address: '123 Test St', id: 1);
+
+    //QR Adapter
+    $QrCodeService = Mockery::mock(QrCodeServiceInterface::class);
+    $QrCodeService->shouldReceive('generateQrCodeForUserAddress')
+        ->once();
 
     // Create mock repository
     $repository = Mockery::mock(UserRepositoryInterface::class);
@@ -28,7 +36,8 @@ test('create user use case creates a user', function () {
     $inputDTO = new CreateUserInputDTO('Test User', 25, '123 Test St');
 
     // Execute the use case
-    $useCase = new CreateUserUseCase($repository);
+
+    $useCase = new CreateUserUseCase($repository, $QrCodeService);
     $outputDTO = $useCase->execute($inputDTO);
 
     // Verify output

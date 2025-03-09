@@ -14,6 +14,7 @@ use App\Application\UseCases\User\GetUserUseCase;
 use App\Application\UseCases\User\UpdateScoreUseCase;
 use App\Domain\Entities\User;
 use App\Domain\Enums\ScoreOperationEnum;
+use App\Domain\Services\QrCodeService;
 use App\Http\Controllers\Controller;
 use App\Infrastructure\Repositories\UserEloquentRepository;
 use Illuminate\Http\JsonResponse;
@@ -76,7 +77,8 @@ class UserController extends Controller
             address: $validatedData['address']
         );
 
-        $createUserUseCase = new CreateUserUseCase($this->userRepository);
+        $qrService = new QrCodeService();
+        $createUserUseCase = new CreateUserUseCase($this->userRepository,  $qrService);
         $outputDTO = $createUserUseCase->execute($inputDTO);
 
         return response()->json(['user' => $outputDTO->user], Response::HTTP_CREATED);

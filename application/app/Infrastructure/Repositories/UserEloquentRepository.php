@@ -207,4 +207,22 @@ class UserEloquentRepository implements UserRepositoryInterface
 
         return $users->toArray();
     }
+
+    /**
+     * @param User $user
+     * @return User
+     */
+    public function updateUserQrCode(User $user): User
+    {
+        if (is_null($user->getId()) || is_null($user->getQrCodePath())) {
+            return $user;
+        }
+
+        $userModel = UserModel::findOrFail($user->getId());
+        $userModel->update([
+            'qr_code_path' => $user->getQrCodePath()
+        ]);
+
+        return $this->mapToEntity($userModel);
+    }
 }

@@ -40,6 +40,14 @@ interface UserRepositoryInterface
     public function update(User $user): User;
 
     /**
+     * Sets the QR code path for the user
+     *
+     * @param User $user
+     * @return User
+     */
+    public function updateUserQrCode(User $user): User;
+
+    /**
      * Delete a user by ID
      *
      * @param int $id
