@@ -64,4 +64,11 @@ interface UserRepositoryInterface
      * @return User|null
      */
     public function subtractPoints(int $userId, int $points): ?User;
+
+    /**
+     * Return users by score
+     *
+     * @return array
+     */
+    public function getUsersGroupedByScore(): array;
 }

@@ -133,4 +133,10 @@ class UserController extends Controller
             return response()->json(['error' => $e->getMessage()], Response::HTTP_NOT_FOUND);
         }
     }
+
+    public function listUsersByScore()
+    {
+        $users = $this->userRepository->getUsersGroupedByScore();
+        return response()->json($users);
+    }
 }
