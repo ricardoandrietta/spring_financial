@@ -12,6 +12,7 @@ use App\Application\UseCases\User\UpdateScoreUseCase;
 use App\Domain\Entities\User;
 use App\Domain\Enums\ScoreOperationEnum;
 use App\Domain\Repositories\Interfaces\UserRepositoryInterface;
+use App\Domain\Services\QrCodeService;
 use App\Infrastructure\Repositories\UserEloquentRepository;
 use Livewire\Component;
 
@@ -135,7 +136,8 @@ class Leaderboard extends Component
                 $this->address
             );
 
-            $createUserUseCase = new CreateUserUseCase($this->userRepository);
+            $qrService = new QrCodeService();
+            $createUserUseCase = new CreateUserUseCase($this->userRepository, $qrService);
             $createUserUseCase->execute($inputDTO);
 
             $this->closeAddUserModal();

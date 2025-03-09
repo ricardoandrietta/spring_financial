@@ -8,10 +8,15 @@ use App\Application\DTOs\User\CreateUserInputDTO;
 use App\Application\DTOs\User\UserOutputDTO;
 use App\Domain\Entities\User;
 use App\Domain\Repositories\Interfaces\UserRepositoryInterface;
+use App\Domain\Services\Interfaces\QrCodeAdapterInterface;
+use App\Domain\Services\Interfaces\QrCodeServiceInterface;
 
 class CreateUserUseCase
 {
-    public function __construct(protected UserRepositoryInterface $userRepository)
+    public function __construct(
+        protected UserRepositoryInterface $userRepository,
+        protected QrCodeServiceInterface $qrCodeGenerator,
+    )
     {
     }
 
@@ -25,6 +30,8 @@ class CreateUserUseCase
         );
 
         $createdUser = $this->userRepository->create($user);
+        $this->qrCodeGenerator->generateQrCodeForUserAddress($createdUser, $this->userRepository);
+
 
         return new UserOutputDTO($createdUser->toArray());
     }
