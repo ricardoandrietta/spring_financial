@@ -1,15 +1,16 @@
 <?php
 
 
+use App\Domain\Entities\User;
 use App\Domain\Jobs\Interfaces\QrCodeGenerationJobInterface;
+use App\Domain\Repositories\Interfaces\UserRepositoryInterface;
 use App\Domain\Services\Interfaces\QrCodeAdapterInterface;
 use App\Domain\Services\QrCodeService;
 use App\Infrastructure\Adapters\GoQrAdapter;
-use App\Infrastructure\Jobs\GenerateUserQrCode;
+use App\Infrastructure\Jobs\GenerateUserQrCodeJob;
 use App\Infrastructure\Repositories\UserEloquentRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,7 +18,7 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     // Create a test user
-    $this->user = new \App\Domain\Entities\User(
+    $this->user = new User(
         name: 'John',
         age: 25,
         score: 85,
@@ -26,8 +27,19 @@ beforeEach(function () {
         id: 1
     );
 
-    // Create the repository instance
-    $this->repository = new UserEloquentRepository();
+    // Create a mock repository that will return the domain entity
+    $this->repository = Mockery::mock(UserRepositoryInterface::class);
+    $this->repository->shouldReceive('findById')
+        ->with(1)
+        ->andReturn($this->user);
+
+    $this->repository->shouldReceive('update')
+        ->with(Mockery::type(User::class))
+        ->andReturn(true);
+
+    $this->repository->shouldReceive('updateUserQrCode')
+        ->with(Mockery::type(User::class))
+        ->andReturn($this->user);
 
     // Mock storage
     Storage::fake('local');
@@ -45,7 +57,7 @@ test('qr code service dispatches job when called', function () {
     $qrCodeService->generateQrCodeForUserAddress($this->user, $this->repository);
 
     // Assert
-    Queue::assertPushed(GenerateUserQrCode::class, function ($job) {
+    Queue::assertPushed(GenerateUserQrCodeJob::class, function ($job) {
         return $job->getUserId() === $this->user->getId();
     });
 });
@@ -60,7 +72,7 @@ test('job generates and stores qr code successfully with adapter', function () {
 
     $this->app->instance(QrCodeGenerationJobInterface::class, $mockQrCodeAdapter);
 
-    $job = new GenerateUserQrCode($this->user, $this->repository, $mockQrCodeAdapter);
+    $job = new GenerateUserQrCodeJob($this->user, $this->repository, $mockQrCodeAdapter);
 
     // Act
     $job->handle();

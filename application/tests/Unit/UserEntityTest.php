@@ -34,6 +34,7 @@ test('user entity can be converted to array', function () {
         'age' => 45,
         'score' => 15,
         'address' => '202 Elm Blvd',
+        'qrCodePath' => null
     ]);
 });
 

@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
-class GenerateUserQrCode implements QrCodeGenerationJobInterface, ShouldQueue
+class GenerateUserQrCodeJob implements QrCodeGenerationJobInterface, ShouldQueue
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
