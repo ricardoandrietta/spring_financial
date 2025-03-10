@@ -2,6 +2,7 @@
 
 namespace App\Domain\Repositories\Interfaces;
 use App\Domain\Entities\User;
+use App\Models\User as UserModel;
 
 interface UserRepositoryInterface
 {
@@ -86,4 +87,12 @@ interface UserRepositoryInterface
      * @return array<User> Array of users with the highest score
      */
     public function findUsersWithHighestScore(): array;
+
+    /**
+     * Map a UserModel to a User entity
+     *
+     * @param UserModel $userModel
+     * @return User
+     */
+    public function mapToEntity(UserModel $userModel): User;
 }

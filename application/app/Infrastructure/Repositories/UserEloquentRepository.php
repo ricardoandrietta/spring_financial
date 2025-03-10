@@ -156,13 +156,14 @@ class UserEloquentRepository implements UserRepositoryInterface
      * @param UserModel $userModel
      * @return User
      */
-    private function mapToEntity(UserModel $userModel): User
+    public function mapToEntity(UserModel $userModel): User
     {
         return new User(
             name: $userModel->name,
             age: $userModel->age,
             score: $userModel->score,
             address: $userModel->address,
+            qrCodePath: $userModel->qr_code_path,
             id: $userModel->id
         );
     }

@@ -8,8 +8,6 @@ use App\Domain\Entities\User;
 use App\Domain\Jobs\Interfaces\QrCodeGenerationJobInterface;
 use App\Domain\Repositories\Interfaces\UserRepositoryInterface;
 use App\Domain\Services\Interfaces\QrCodeAdapterInterface;
-use App\Infrastructure\Repositories\UserEloquentRepository;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -69,6 +67,7 @@ class GenerateUserQrCode implements QrCodeGenerationJobInterface, ShouldQueue
             Storage::put($storagePath, $qrCodeImage);
 
             // Update the user with the file path
+            $this->user->setQrCodePath($storagePath);
             $this->userRepository->updateUserQrCode($this->user);
 
             Log::info("QR code generated and stored for user {$this->user->getId()}");

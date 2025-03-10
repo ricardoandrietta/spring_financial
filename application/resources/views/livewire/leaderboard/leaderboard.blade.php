@@ -152,6 +152,12 @@
                         <span class="text-sm font-medium text-gray-500 block mb-1">Address</span>
                         <span class="text-gray-900 break-words block">{{ $selectedUser['address'] }}</span>
                     </div>
+                    @isset($selectedUser['qrBase64Img'])
+                    <div>
+                        <span class="text-sm font-medium text-gray-500 block mb-1">Adddress QR</span>
+                        <img src="data:image/png;base64,{{$selectedUser['qrBase64Img']}}" alt="QR Code">
+                    </div>
+                    @endisset
                 </div>
 
                 <div class="mt-6">
