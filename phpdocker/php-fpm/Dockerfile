@@ -32,3 +32,6 @@ RUN echo "source $NVM_DIR/nvm.sh && \
     nvm install $NODE_VERSION && \
     nvm alias default $NODE_VERSION && \
     nvm use default" | bash
+
+# Updating NPM
+RUN npm install npm@latest -g

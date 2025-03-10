@@ -2,7 +2,8 @@
 
 ## Project Overview
 
-Spring Financial is a real-time leaderboard application built with Laravel 12 following Clean Architecture principles. The application allows you to create users, manage their scores, and view a real-time leaderboard with updates.
+Spring Financial is a real-time leaderboard application built with Laravel 12 following Clean Architecture principles.  
+The application allows you to create users, manage their scores, and view a real-time leaderboard with updates.
 
 ## Key Features
 
@@ -65,14 +66,7 @@ This will start the following services:
 ### 4. Install Dependencies
 
 ```bash
-# Enter the PHP container
-docker compose exec php spring_php bash
-
-# Inside the container, run:
-composer install
-
-# Exit the container
-exit
+docker compose exec -it spring_php composer install
 ```
 
 ### 5. DB Configuration
@@ -84,6 +78,11 @@ The MySQL database is configured with the following credentials:
 - **Password**: financial_202503
 
 You can change these default values in your docker-compose.yml
+
+Create your `.env` file
+```bash
+cp application/.env.example application/.env
+```
 
 Update the `.env` file with your database credentials details:
 ```
@@ -102,6 +101,7 @@ DB_PASSWORD=financial_202503
 docker compose exec php spring_php bash
 
 # Inside the container, run:
+php artisan key:generate
 php artisan migrate
 php artisan db:seed
 npm install && npm run build
@@ -117,16 +117,24 @@ The application will be available at:
 
 ## Available API Endpoints
 
-- `GET /api/v1/users` - List all users
 - `POST /api/v1/users` - Create a new user
+- `GET /api/v1/users` - List all users
 - `GET /api/v1/users/{id}` - Get a specific user
-- `DELETE /api/v1/users/{id}` - Delete a user
 - `PATCH /api/v1/users/{id}/add-points` - Add points to a user
 - `PATCH /api/v1/users/{id}/subtract-points` - Subtract points from a user
-- `POST /api/v1/users/{userId}/generate-qr-code` - Generate QR code for user's address
+- `DELETE /api/v1/users/{id}` - Delete a user
+- `GET /api/v1/users/by_score` - Get users grouped by score, showing their names and average age
 
 Here is a Postman Collection for you to get started with these APIs:
 [Spring Financial.Collection](readme_files/SpringFinancial.postman_collection.json)
+
+## Resetting Scores
+
+To reset all user scores:
+
+```bash
+docker exec -it spring_php php artisan app:reset-score
+```
 
 ## User's Address QR Code Generation
 
@@ -146,9 +154,21 @@ By design, when a user is created, a job is created to generate the QR code asyn
 2. Ensure storage is properly configured
 3. Run a queue worker to process the jobs:
 
+### Start queue worker
 ```bash
-docker compose exec spring_php php artisan queue:work
+docker exec -it spring_php php artisan queue:work
 ```
+
+### List Scheduled Jobs
+```bash
+docker exec -it spring_php php artisan schedule:list
+```
+
+### Start Schedule worker
+```bash
+docker exec -it spring_php php artisan schedule:work
+```
+
 ## Running Tests
 
 To run the test suite:
@@ -164,18 +184,11 @@ php artisan test
 php artisan test --filter=UserEntityTest
 
 # Run tests with coverage report (requires Xdebug)
+# Change the phpdocker/php-fpm/php-ini-overrides.ini file: add coverage to xdebug.mode
 php artisan test --coverage
 
 # Exit the container
 exit
-```
-
-## Resetting Scores
-
-To reset all user scores:
-
-```bash
-docker compose exec spring_php php artisan app:reset-score
 ```
 
 ## Docker Commands
@@ -183,13 +196,13 @@ docker compose exec spring_php php artisan app:reset-score
 - Start containers: `docker compose up -d`
 - Stop containers: `docker compose stop`
 - View logs: `docker compose logs` or `docker compose logs SERVICE_NAME`
-- Shell into PHP container: `docker compose exec spring_php bash`
-- Run artisan commands: `docker compose exec spring_php php artisan COMMAND`
-- MySQL shell: `docker compose exec mysql mysql -uleaderboard -pfinancial_202503 leaderboard`
+- Shell into PHP container: `docker compose exec -it spring_php bash`
+- Run artisan commands: `docker compose exec -it spring_php php artisan COMMAND`
+- MySQL shell: `docker compose exec -it mysql mysql -uleaderboard -pfinancial_202503 leaderboard`
 
 ## Debugging
 
-The Docker setup includes Xdebug configuration for debugging with IDEs like PHPStorm or Visual Studio Code.
+The Docker setup includes Xdebug configuration for debugging with IDEs like PHPStorm.
 
 ### For PHPStorm:
 1. In PHPStorm, go to Preferences | Languages & Frameworks | PHP | Servers
