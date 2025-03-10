@@ -1,11 +1,106 @@
 {
 	"info": {
 		"_postman_id": "9af6a476-1ad3-4dc7-817e-8b64f922b842",
-		"name": "SpringFinancial",
+		"name": "Spring Financial",
+		"description": "Leaderbord project.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "2793540"
 	},
 	"item": [
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Ricardo\",\n    \"age\": 24,\n    \"address\": \"135 19th E, North Van\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				},
+				"description": "Create new user. Score is 0 by default."
+			},
+			"response": [
+				{
+					"name": "201",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Ricardo\",\n    \"age\": 24,\n    \"address\": \"135 19th E, North Van\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.27.4"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 08 Mar 2025 19:35:16 GMT"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"user\": {\n        \"id\": 7,\n        \"name\": \"Ricardo\",\n        \"age\": 24,\n        \"score\": 0,\n        \"address\": \"135 19th E, North Van\"\n    }\n}"
+				}
+			]
+		},
 		{
 			"name": "Get All Users",
 			"request": {
@@ -21,7 +116,8 @@
 						"v1",
 						"users"
 					]
-				}
+				},
+				"description": "List all active (non deleted) users"
 			},
 			"response": [
 				{
@@ -30,10 +126,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/v1/users",
+							"raw": "http://localhost:8000/api/v1/users",
+							"protocol": "http",
 							"host": [
-								"{{baseUrl}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -80,12 +178,12 @@
 			]
 		},
 		{
-			"name": "Subtract Score",
+			"name": "User by ID",
 			"request": {
-				"method": "PATCH",
+				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/api/v1/users/:userId/subtract-points",
+					"raw": "{{baseUrl}}/api/v1/users/:userId",
 					"host": [
 						"{{baseUrl}}"
 					],
@@ -93,39 +191,40 @@
 						"api",
 						"v1",
 						"users",
-						":userId",
-						"subtract-points"
+						":userId"
 					],
 					"variable": [
 						{
 							"key": "userId",
-							"value": "4"
+							"value": "2"
 						}
 					]
-				}
+				},
+				"description": "Show user information."
 			},
 			"response": [
 				{
 					"name": "200",
 					"originalRequest": {
-						"method": "PATCH",
+						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/v1/users/:userId/subtract-points",
+							"raw": "http://localhost:8000/api/v1/users/:userId",
+							"protocol": "http",
 							"host": [
-								"{{baseUrl}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"api",
 								"v1",
 								"users",
-								":userId",
-								"subtract-points"
+								":userId"
 							],
 							"variable": [
 								{
 									"key": "userId",
-									"value": "4"
+									"value": "2"
 								}
 							]
 						}
@@ -156,7 +255,7 @@
 						},
 						{
 							"key": "Date",
-							"value": "Sat, 08 Mar 2025 19:39:02 GMT"
+							"value": "Mon, 10 Mar 2025 00:54:28 GMT"
 						},
 						{
 							"key": "Access-Control-Allow-Origin",
@@ -164,68 +263,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"user\": {\n        \"id\": 4,\n        \"name\": \"Juvenal Hickle\",\n        \"age\": 42,\n        \"score\": 0,\n        \"address\": \"5576 Avis Square Suite 456\\nWest Tiana, DE 05461\"\n    }\n}"
-				},
-				{
-					"name": "404",
-					"originalRequest": {
-						"method": "PATCH",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/api/v1/users/:userId/subtract-points",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								":userId",
-								"subtract-points"
-							],
-							"variable": [
-								{
-									"key": "userId",
-									"value": "44"
-								}
-							]
-						}
-					},
-					"status": "Not Found",
-					"code": 404,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Server",
-							"value": "nginx/1.27.4"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						},
-						{
-							"key": "Transfer-Encoding",
-							"value": "chunked"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Cache-Control",
-							"value": "no-cache, private"
-						},
-						{
-							"key": "Date",
-							"value": "Sat, 08 Mar 2025 20:56:41 GMT"
-						},
-						{
-							"key": "Access-Control-Allow-Origin",
-							"value": "*"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"error\": \"User not found with ID: 44\"\n}"
+					"body": "{\n    \"user\": {\n        \"id\": 2,\n        \"name\": \"Marge Langworth IV\",\n        \"age\": 37,\n        \"score\": 0,\n        \"address\": \"45680 Major Road\\nNorth Candidoport, MT 24153\"\n    }\n}"
 				}
 			]
 		},
@@ -255,7 +293,8 @@
 							"value": "2"
 						}
 					]
-				}
+				},
+				"description": "Add 1 point to the current score."
 			},
 			"response": [
 				{
@@ -264,10 +303,12 @@
 						"method": "PATCH",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/v1/users/:userId/add-points",
+							"raw": "http://localhost:8000/api/v1/users/:userId/add-points",
+							"protocol": "http",
 							"host": [
-								"{{baseUrl}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -383,60 +424,61 @@
 			]
 		},
 		{
-			"name": "Create User",
+			"name": "Subtract Score",
 			"request": {
-				"method": "POST",
+				"method": "PATCH",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Ricardo\",\n    \"age\": 24,\n    \"address\": \"135 19th E, North Van\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "{{baseUrl}}/api/v1/users",
+					"raw": "{{baseUrl}}/api/v1/users/:userId/subtract-points",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"users"
+						"users",
+						":userId",
+						"subtract-points"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "1"
+						}
 					]
-				}
+				},
+				"description": "Subtract 1 point from the current score."
 			},
 			"response": [
 				{
-					"name": "201",
+					"name": "200",
 					"originalRequest": {
-						"method": "POST",
+						"method": "PATCH",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Ricardo\",\n    \"age\": 24,\n    \"address\": \"135 19th E, North Van\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "{{baseUrl}}/api/v1/users",
+							"raw": "http://localhost:8000/api/v1/users/:userId/subtract-points",
+							"protocol": "http",
 							"host": [
-								"{{baseUrl}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"api",
 								"v1",
-								"users"
+								"users",
+								":userId",
+								"subtract-points"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "4"
+								}
 							]
 						}
 					},
-					"status": "Created",
-					"code": 201,
+					"status": "OK",
+					"code": 200,
 					"_postman_previewlanguage": "json",
 					"header": [
 						{
@@ -461,7 +503,7 @@
 						},
 						{
 							"key": "Date",
-							"value": "Sat, 08 Mar 2025 19:35:16 GMT"
+							"value": "Sat, 08 Mar 2025 19:39:02 GMT"
 						},
 						{
 							"key": "Access-Control-Allow-Origin",
@@ -469,7 +511,68 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"user\": {\n        \"id\": 7,\n        \"name\": \"Ricardo\",\n        \"age\": 24,\n        \"score\": 0,\n        \"address\": \"135 19th E, North Van\"\n    }\n}"
+					"body": "{\n    \"user\": {\n        \"id\": 4,\n        \"name\": \"Juvenal Hickle\",\n        \"age\": 42,\n        \"score\": 0,\n        \"address\": \"5576 Avis Square Suite 456\\nWest Tiana, DE 05461\"\n    }\n}"
+				},
+				{
+					"name": "404",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users/:userId/subtract-points",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								":userId",
+								"subtract-points"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "44"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.27.4"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 08 Mar 2025 20:56:41 GMT"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": \"User not found with ID: 44\"\n}"
 				}
 			]
 		},
@@ -495,7 +598,8 @@
 							"value": "9"
 						}
 					]
-				}
+				},
+				"description": "Executes a soft deletion."
 			},
 			"response": [
 				{
@@ -504,10 +608,12 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/v1/users/:userId",
+							"raw": "http://localhost:8000/api/v1/users/:userId",
+							"protocol": "http",
 							"host": [
-								"{{baseUrl}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -576,7 +682,8 @@
 						"users",
 						"by_score"
 					]
-				}
+				},
+				"description": "Returns the user's info grouped by score and include the average age of the users"
 			},
 			"response": [
 				{
@@ -585,10 +692,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/v1/users/by_score",
+							"raw": "http://localhost:8000/api/v1/users/by_score",
+							"protocol": "http",
 							"host": [
-								"{{baseUrl}}"
+								"localhost"
 							],
+							"port": "8000",
 							"path": [
 								"api",
 								"v1",
