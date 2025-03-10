@@ -70,6 +70,10 @@ docker exec -it spring_php composer install
 ```
 
 ### 5. DB Configuration
+
+> The Following credentials are for testing purposes.  
+> NEVER expose your credentials
+
 The MySQL database is configured with the following credentials:
 - **Host**: localhost (from host) or spring_db (from containers)
 - **Port**: 3306
@@ -200,7 +204,7 @@ exit
 
 - Start containers: `docker compose up -d`
 - Stop containers: `docker compose stop`
-- View logs: `docker compose logs` or `docker compose logs SERVICE_NAME`
+- View logs: `docker logs` or `docker logs SERVICE_NAME`
 - Shell into PHP container: `docker exec -it spring_php bash`
 - Run artisan commands: `docker exec -it spring_php php artisan COMMAND`
 - MySQL shell: `docker exec -it mysql mysql -uleaderboard -pfinancial_202503 leaderboard`
@@ -225,7 +229,7 @@ docker exec spring_php chown -R www-data:www-data /application/storage
 
 ### Database Connection Issues
 If the application can't connect to the database, ensure:
-1. The containers are running: `docker compose ps`
+1. The containers are running: `docker ps`
 2. The database credentials in `.env` match those in `docker compose.yml`
 3. The database has been created: `docker exec spring_db mysql -u root -pspring_032025 -e "SHOW DATABASES;"`
 

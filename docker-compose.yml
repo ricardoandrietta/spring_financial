@@ -9,6 +9,8 @@ services:
         volumes:
             - './data:/var/lib/mysql/'
         environment:
+            # > The Following credentials are for testing purposes.
+            # > NEVER expose your credentials
             - MYSQL_ROOT_PASSWORD=spring_032025
             - MYSQL_DATABASE=leaderboard
             - MYSQL_USER=leaderboard
