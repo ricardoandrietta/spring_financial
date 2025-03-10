@@ -66,7 +66,7 @@ This will start the following services:
 ### 4. Install Dependencies
 
 ```bash
-docker compose exec -it spring_php composer install
+docker exec -it spring_php composer install
 ```
 
 ### 5. DB Configuration
@@ -98,7 +98,7 @@ DB_PASSWORD=financial_202503
 
 ```bash
 # Enter the PHP container
-docker compose exec php spring_php bash
+docker exec -it spring_php bash
 
 # Inside the container, run:
 php artisan key:generate
@@ -126,7 +126,9 @@ The application will be available at:
 - `GET /api/v1/users/by_score` - Get users grouped by score, showing their names and average age
 
 Here is a Postman Collection for you to get started with these APIs:
-[Spring Financial.Collection](readme_files/SpringFinancial.postman_collection.json)
+[Spring Financial.Collection](https://raw.githubusercontent.com/ricardoandrietta/spring_financial/refs/heads/main/readme_files/SpringFinancial.postman_collection.json)
+
+Criar env variable: baseUrl to http://localhost:8000
 
 ## Resetting Scores
 
@@ -146,7 +148,8 @@ docker exec -it spring_php php artisan app:reset-score
 - The file path is stored in the `users.qr_code_path` column
 - Filename pattern: `qrcode_{user_id}.png` (e.g., `qrcode_1.png`)
 
-By design, when a user is created, a job is created to generate the QR code asynchronously.
+By design, when a user is created, a job is created to generate the QR code asynchronously.  
+See the instructions below to run the queue.
 
 ### Queue Setup Instructions
 1. Configure your queue driver (currently set to use database)  
@@ -165,6 +168,8 @@ docker exec -it spring_php php artisan schedule:list
 ```
 
 ### Start Schedule worker
+I suggest you to open a new session in your terminal to run the command below.  
+Then, you will be able to see the queue and the schedule working at the same time
 ```bash
 docker exec -it spring_php php artisan schedule:work
 ```
@@ -175,7 +180,7 @@ To run the test suite:
 
 ```bash
 # Enter the PHP container
-docker compose exec spring_php bash
+docker exec -it spring_php bash
 
 # Run all tests
 php artisan test
@@ -196,9 +201,9 @@ exit
 - Start containers: `docker compose up -d`
 - Stop containers: `docker compose stop`
 - View logs: `docker compose logs` or `docker compose logs SERVICE_NAME`
-- Shell into PHP container: `docker compose exec -it spring_php bash`
-- Run artisan commands: `docker compose exec -it spring_php php artisan COMMAND`
-- MySQL shell: `docker compose exec -it mysql mysql -uleaderboard -pfinancial_202503 leaderboard`
+- Shell into PHP container: `docker exec -it spring_php bash`
+- Run artisan commands: `docker exec -it spring_php php artisan COMMAND`
+- MySQL shell: `docker exec -it mysql mysql -uleaderboard -pfinancial_202503 leaderboard`
 
 ## Debugging
 
@@ -215,14 +220,14 @@ The Docker setup includes Xdebug configuration for debugging with IDEs like PHPS
 ### File Permissions
 If you encounter file permission issues, run:
 ```bash
-docker compose exec spring_php chown -R www-data:www-data /application/storage
+docker exec spring_php chown -R www-data:www-data /application/storage
 ```
 
 ### Database Connection Issues
 If the application can't connect to the database, ensure:
 1. The containers are running: `docker compose ps`
 2. The database credentials in `.env` match those in `docker compose.yml`
-3. The database has been created: `docker compose exec spring_db mysql -u root -pspring_032025 -e "SHOW DATABASES;"`
+3. The database has been created: `docker exec spring_db mysql -u root -pspring_032025 -e "SHOW DATABASES;"`
 
 ## License
 
