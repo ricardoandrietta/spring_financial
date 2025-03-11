@@ -132,7 +132,8 @@ The application will be available at:
 Here is a Postman Collection for you to get started with these APIs:
 [Spring Financial.Collection](https://raw.githubusercontent.com/ricardoandrietta/spring_financial/refs/heads/main/readme_files/SpringFinancial.postman_collection.json)
 
-Criar env variable: baseUrl to http://localhost:8000
+To use the collection, you must create an env variable in Postman:  
+`baseUrl` and set it to `http://localhost:8000`
 
 ## Resetting Scores
 
